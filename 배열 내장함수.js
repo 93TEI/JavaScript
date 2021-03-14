@@ -53,6 +53,26 @@ console.log(ft);
 
 //splice : 배열에서 특정 학목 제거
 let num_temp = [1,2,3,4,5];
-num_temp.splice(num_temp.indexOf(1),1);
+num_temp.splice(num_temp.indexOf(1),1);//1개 제거
 console.log(num_temp);
 
+/*
+shift : 앞에 빼기
+unshift : 원하는 걸 앞에 넣기
+poo : 후출
+*/
+
+//join : 문자열 형태로 합쳐줌
+console.log(num_temp.join('이랑 '));
+
+//reduce
+let sum = num_temp.reduce((n,m)=>n+m,0);
+console.log(sum);
+
+let sum2 = num_temp.reduce((acc,cur,index,arr)=>{
+  if(index === num_temp.length-1) {
+    return (acc+cur)/(index+1);
+  }
+  return acc+cur;
+},0);
+console.log(sum2);
