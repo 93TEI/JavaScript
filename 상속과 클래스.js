@@ -22,3 +22,27 @@ dog.age=12;
 console.log(dog.age);
 
 //객체 상속
+function Dog(name,sound){ // 객체상속
+  Animal.call(this,name,sound);
+}
+Dog.prototype = Animal.prototype;//프로토타입은 따로 넣어줘야함
+
+
+//클래스
+class Animals {
+  constructor(type, name, sound){
+    this.type = type;
+    this.name =name;
+    this.sound = sound;
+  }
+  say(){
+    console.log(this.sound);
+  }
+}
+
+//클래스 상속
+class Dogs extends Animals {
+  constructor(name, sound){
+    super('개',name,sound); // super() : 상속받은 클래스의 생성자를 가르킴
+  }
+}
