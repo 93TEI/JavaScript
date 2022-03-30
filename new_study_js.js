@@ -348,7 +348,7 @@ console.log("abc".codePointAt(1)); //98
 
 
 ///////////////////// 배열
-let arr = [1,2,3,4,5];
+let arr = [1,2,3,4,5,6,7,8,9];
 let n = 1; // error 때문에 그냥 넣은 의미없는 코드
 let m = 2;
 let p = 3;
@@ -358,3 +358,232 @@ arr.splice(n,m);
 
 // n부터 m개 지우고 거기에 p 추가
 arr.splice(n,m,p);
+
+// 내림차순
+console.log(arr.sort((a,b)=> b-a)); // 음수,0,양수 반환
+
+// https://lodash.com/ 에 들어가면 sort에 대한 것을 쉽게 가능
+
+// arr.reduce((누적값,현재값),초기값) : 누적으로 더하기
+
+
+//////////////////////// 구조 분해 할당
+let alpha = ['M','T','J'];
+let alpha_str = "MtoTtoJ";
+
+//원래는 각각 넣어야 하는 것을 분해해서 하나씩 넣어줄 수 있다.
+let [alpha1, alpha2, alpha3="X"] = alpha; // "X"처럼 값이 안들어왔을 때 기본값 설정가능
+
+// 구조 분해 할당 + split()
+let [alpha4,alpha5,alpha6] = alpha_str.split("to");
+
+console.log(alpha1,alpha2,alpha3+" , "+alpha4,alpha5,alpha6); // M T J, M T J
+
+
+
+///////////////// 나머지 매개변수, 전개구문
+
+//argument
+function showtemp(name){
+    console.log(arguments.length);
+    console.log(arguments[0]);
+}
+showtemp(num); // 1과 9가 뜬다
+
+
+// 나머지 매개변수 : 정해지지 않은 개수의 인수를 배열로 받음
+function freeParameter(...name){
+    console.log(name.reduce((prev,cur)=>{
+        return prev += cur;
+    },0)
+    );
+}
+freeParameter(1,2,3,4,5,6,7,8,9,10); // 55
+
+// 전개구문 : 나머지 매개변수를 전개로 쓰는 것
+let tt = [1,2,3];
+let tt_concat = [...tt]; // 메모리 주소를 보내는 것이 아닌 복제가 됨
+
+
+// 클로저 : 내부함수에서 외부함수가 끝났음에도 값을 참조할 수 있는 것 -> 은닉화 가능
+
+
+// setTimeout : 일정 시간 후 '함수' 실행
+const tId=  setTimeout(function(what){
+                console.log(what+"실행합니다.");
+            }, 3000,"뭔가가");
+
+clearTimeout(tId); // 스케줄링 취소 ( 실행안됨 )
+
+// setInterval : 일정 시간 간격으로 '함수' 반복
+const itvTid = setInterval(function(){console.log("a");},3000);
+clearInterval(itvTid);
+
+
+// .call() : this를 특정값으로 지정 가능 (모든 함수에서 사용가능) // .apply()도 거의 똑같다
+
+
+// hasOwnProperty() : 프로퍼티 존재 확인
+console.log(objman.hasOwnProperty('name')); // true
+
+// 상속받기 , 기본설정 추가하기
+
+const car = {
+    wheels : 4,
+}
+
+const bmw = {
+    color : "red",
+}
+bmw.__proto__ = car; // 생성자함수에서의 상속 , 프로퍼타입 체인 --> prototype으로 만들어주면 더 좋음
+console.log(bmw.wheels); //4
+
+
+//////////////// 클래스
+
+class User_class {
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    showName(){ // showName은 정보로 안나온다. 클래스 내 정의한 메소드는 prototype으로 만들어지기 때문(__proto__에 있음)
+        console.log(this.name);
+    }
+}
+const tom = new User_class("Tom",19);
+console.log(tom);
+
+// extends : 클래스에서의 상속
+// super() : 부모의 메소드를 오버라이딩
+
+class car2 {
+    constructor(color){ // 생성자는 빈 객체 {} 를 만들고 나머지를 추가하는 방식
+        this.color = color;
+        this.wheels = 4;
+    }
+
+    drive(){
+        console.log("drive!");
+    }
+    stop(){
+        console.log("stop!");
+    }
+}
+
+class bmw2 extends car2{
+    constructor(color,who){
+        super(color);    // 자식클래스는 빈 객체를 생성하지 않고 넘어가기 때문에 부모클래스의 생성자를 호출해야 한다. 부모에서 받은 인자를 super에도 똑같이 넣어야함
+        this.who = "tei" ;
+    }
+    stop(){
+        super.stop(); // 부모클래스의 stop()
+        console.log("stop! stop!!");
+    }
+}
+
+const z4 = new bmw2("blue");
+console.log(z4); // stop! stop!!
+
+// promise : 어떤 일이 완료됐을 때 알려주는 함수 ( callback함수 )
+/*
+    (resolve,reject) : 각각 성공, 실패 했을 때 반환값
+    state : pending(대기)
+    result : undefined
+
+        resolve(value)  성공하면
+
+    state : fulfilled(이행됨)
+    result : value
+
+        reject(error)
+    state : reject(거부됨)
+    result : error
+
+*/
+
+const pr_resolve = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+    resolve('OK')
+    },3000)
+});
+
+
+const pr_reject = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+    reject(new Error('error~~'))  // 에러를 띄워줌
+}, 2000)
+});
+
+pr_resolve.then(
+    function(result){
+        console.log(result + ' 다 됐네');
+    },
+    function(err){
+        console.log('다시 주문하자');
+    }
+);
+
+pr_reject.then(
+    function(result){
+        console.log(result + ' 됐다');
+    }
+).catch(
+    function(err){
+        console.log(err +' 실패했습니다');
+    }
+).finally(
+    function(){
+        console.log('--주문 끝--');
+    }
+)
+
+// Promise.all ( 동시에 promise 처리하기 )
+
+Promise.all([pr_resolve,pr_reject]).then((res)=>{
+    console.log(res);
+}).catch(
+    function(res){
+        console.log(res+'실패도 했습니다');
+    }
+)
+
+// Promise.race ( 동시에 promise를 시작하여 처음으로 끝나는 것 하나 외에 나머지는 실행중단 )
+
+Promise.race([pr_resolve,pr_reject]).then((res)=>{
+    console.log(res);
+}).catch(
+    function(res){
+        console.log(res+'실패도 했습니다');
+    }
+)
+
+// async : function 앞에 async을 붙이면 Promise로 반환한다
+async function async_fn(){
+    throw new Error; // 에러 보내기
+    //return "async-function call"; // 성공 보내기
+}
+async_fn().then((name)=>console.log(name)).catch((err)=>console.log(err+" 에러가 났다"));
+
+// await : async 내부에서 사용 가능, await 오른쪽에 Promise가 와야하며, 해당 Promise가 끝날 때까지 기다린다
+
+
+
+/*
+generator : 함수 실행을 중간에 멈췄다가 재개할 수 있는 기능, function 옆에 *붙여서 만들고, 내부에 yield를 사용
+
+generator 함수는 객체를 반환하는데, .next()로 다음 yield까지 실행시킨다.
+
+ */
+function* fn() {
+    console.log('첫번째');
+    yield 1;
+    console.log('두번째');
+    yield 2;
+    console.log('세번째');
+    console.log('네번째');
+    yield 3;
+    return "끝";
+}
+
+const gen = fn();
+gen.next;
