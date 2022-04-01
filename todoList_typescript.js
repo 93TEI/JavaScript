@@ -19,7 +19,7 @@ const App: FC = () => {
   const addTask = (): void => {
     const newTask = { taskName: task, deadline: deadline };
     setTodoList([...todoList, newTask]);
-    //
+    //비워줌
     setTask("");
     setDealine(0);
   };
